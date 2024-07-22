@@ -15,6 +15,15 @@ services:
     volumes:
       - ../db:/docker-entrypoint-initdb.d
       - appDb:/var/lib/mysql
-
+  php:
+    container_name: php-apache
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:80
+    volumes:
+      - ./src:/var/www/html
+ 
 volumes:
   appDb:
