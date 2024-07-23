@@ -1,29 +1,24 @@
 <?php
+require 'db.php';
 
-echo "Hello from the docker yooooo container";
+try {
+    $conn = ConnectDB();
+    $conn->begin_transaction();
 
-$mysqli = new mysqli("localhost", "root", "example", "company1");
+    $dateTime = new DateTime();
+    $formattedDateTime = $dateTime->format('Y-m-d H:i:s');
 
-$sql = "INSERT INTO users (name, fav_color) VALUES('Lil Sneazy', 'Yellow')";
-$result = $mysqli->query($sql);
-$sql = "INSERT INTO users (name, fav_color) VALUES('Nick Jonas', 'Brown')";
-$result = $mysqli->query($sql);
-$sql = "INSERT INTO users (name, fav_color) VALUES('Maroon 5', 'Maroon')";
-$result = $mysqli->query($sql);
-$sql = "INSERT INTO users (name, fav_color) VALUES('Tommy Baker', '043A2B')";
-$result = $mysqli->query($sql);
+    $query = "INSERT INTO tasks (id, title, completed, created_at, updated_at) VALUES ('id_1', 'tes_task', 2, '$formattedDateTime', '$formattedDateTime')";
 
+    $result = $conn->query($query);
 
-$sql = 'SELECT * FROM users';
-
-if ($result = $mysqli->query($sql)) {
-    while ($data = $result->fetch_object()) {
-        $users[] = $data;
+    if ($result) {
+        $conn->commit();
+        echo "Success query";
+    } else {
+        throw new Exception($conn->error);
     }
-}
-
-foreach ($users as $user) {
-    echo "<br>";
-    echo $user->name . " " . $user->fav_color;
-    echo "<br>";
+} catch (Exception $e) {
+    $conn->rollBack();
+    echo "Failed: " . $e->getMessage();
 }

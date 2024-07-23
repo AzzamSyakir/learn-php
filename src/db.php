@@ -1,11 +1,16 @@
 <?php
-$servername = getenv('MYSQL_HOST');
-$username = getenv('MYSQL_USER');
-$password = getenv('MYSQL_PASSWORD');
+require 'vendor/autoload.php';
 
-$conn = new mysqli($servername, $username, $password);
-
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
+function ConnectDB() : mysqli {
+  $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+  $dotenv->load();
+  $dbHost = $_ENV['MYSQL_HOST'];
+  $dbUserName = $_ENV['MYSQL_USER'];
+  $dbPassword = $_ENV['MYSQL_PASSWORD'];
+  $dbName = $_ENV['MYSQL_DB'];
+  $conn = new mysqli($dbHost, $dbUserName, $dbPassword, $dbName);
+  if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+  }
+  return $conn;
 }
-echo "Connected successfully";
