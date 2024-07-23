@@ -1,16 +1,17 @@
-create table IF NOT EXISTS users
+CREATE TABLE IF NOT EXISTS users
 (
-    id uuid not null primary key,
-    name text not null unique ,
-    password TEXT not null  ,
-    created_at timestamptz not null ,
-    updated_at timestamptz not null
+    id CHAR(36) NOT NULL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL, 
+    updated_at TIMESTAMP NOT NULL 
 );
-create table IF NOT EXISTS tasks
+
+CREATE TABLE IF NOT EXISTS tasks
 (
-    id uuid not null primary key,
-    title text not null unique ,
-    completed boolean not null  ,
-    created_at timestamptz not null ,
-    updated_at timestamptz not null
+    id CHAR(36) NOT NULL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL UNIQUE,
+    completed BOOLEAN NOT NULL,
+    created_at TIMESTAMP NOT NULL, 
+    updated_at TIMESTAMP NOT NULL 
 );

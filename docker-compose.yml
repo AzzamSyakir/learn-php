@@ -11,9 +11,9 @@ services:
     expose:
       - 3306
     ports:
-      - ${MYSQL_PORT}:3306
+      - ${MYSQL_PORT}:${MYSQL_PORT}
     volumes:
-      - ../db:/docker-entrypoint-initdb.d
+      - ./db:/docker-entrypoint-initdb.d
       - appDb:/var/lib/mysql
   php:
     container_name: php-apache
