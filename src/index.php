@@ -1,24 +1,21 @@
 <?php
 require 'db.php';
+require 'create.php';
+require 'fetch.php';
 
-try {
-    $conn = ConnectDB();
-    $conn->begin_transaction();
+$conn = ConnectDB();
+$conn->begin_transaction();
 
-    $dateTime = new DateTime();
-    $formattedDateTime = $dateTime->format('Y-m-d H:i:s');
+// $createTask = CreateData($conn);
+// if ($createTask) {
+//     echo "query success";
+// } 
 
-    $query = "INSERT INTO tasks (id, title, completed, created_at, updated_at) VALUES ('id_1', 'tes_task', 2, '$formattedDateTime', '$formattedDateTime')";
-
-    $result = $conn->query($query);
-
-    if ($result) {
-        $conn->commit();
-        echo "Success query";
-    } else {
-        throw new Exception($conn->error);
+$fetchTask = FetchData($conn);
+if (!empty($fetchTask)) {
+    foreach ($fetchTask as $row) {
+        echo "ID: " . $row['id'] . " - title: " . $row['title'] . " - completed: " . $row['completed'] . " - created_at: " . $row['created_at'] . " - updated_at: " . $row['updated_at'] . "<br>";
     }
-} catch (Exception $e) {
-    $conn->rollBack();
-    echo "Failed: " . $e->getMessage();
+} else {
+    echo "No data found.";
 }
