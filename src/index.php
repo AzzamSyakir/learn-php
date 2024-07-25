@@ -1,21 +1,26 @@
 <?php
-require 'db.php';
-require 'create.php';
-require 'fetch.php';
+echo
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Methods: OPTIONS,GET,POST,PUT,DELETE");
+header("Access-Control-Max-Age: 3600");
+header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$method = $_SERVER['REQUEST_METHOD'];
 
-$conn = ConnectDB();
-$conn->begin_transaction();
-
-// $createTask = CreateData($conn);
-// if ($createTask) {
-//     echo "query success";
-// } 
-
-$fetchTask = FetchData($conn);
-if (!empty($fetchTask)) {
-    foreach ($fetchTask as $row) {
-        echo "ID: " . $row['id'] . " - title: " . $row['title'] . " - completed: " . $row['completed'] . " - created_at: " . $row['created_at'] . " - updated_at: " . $row['updated_at'] . "<br>";
+switch ($uri) {
+  
+case '/api/users':
+  require 'controller/user_controller.php';
+  $controller = new UserController();
+  if ($method == 'GET') {
+  $controller->get();
+  } elseif ($method == 'POST') {
+  $controller->post();
+  }
+  break;
+  default:
+            header("HTTP/1.0 404 Not Found");
+            echo "404 Not Found";
+            break;
     }
-} else {
-    echo "No data found.";
-}
